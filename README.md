@@ -1,8 +1,8 @@
 # Factory Operations and Operator Assignment Data Pipeline
 **Author:** Kacper Prorok  
 **Tech Stack:** Python, Streamlit, Databricks (PySpark, SQL), Delta Lake, Power BI
-**Date of first release: 09.2026**
 
+**Date of first release: 09.2026**
 ---
 
 A comprehensive end-to-end system for tracking, processing, and analyzing operator working hours across manufacturing cells. This project covers the entire data lifecycle: from custom event logging via a lightweight web application, through scalable Big Data transformations in Databricks, to executive reporting in Power BI.
