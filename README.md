@@ -534,24 +534,42 @@ This matrix view is designed specifically for shift managers and production plan
 
 To demonstrate the practical application of the end-to-end data pipeline, this section outlines common, real-world operational scenarios on the factory floor. These examples illustrate how the Streamlit frontend captures complex events, and how the Databricks engine successfully resolves them for Power BI reporting.
 
-## Scenario 1: Handling an Unplanned Absence (Sick Leave)
-**The Situation:** The Default Operator for a critical workstation reports sick just before the shift starts.
-**The Action:** The Shift Leader logs an absence event in the Streamlit Event Logger.
-**The Result:** The Databricks Silver layer detects the absence, automatically drops the Default Operator for that specific day, and reassigns the production hours to the designated Backup Operator. 
+### Scenario 1: Handling an Unplanned Absence (Sick Leave)
+**The Situation:** The Default Operator (Dariusz Wesoły) is scheduled for a full 8-hour shift on the A01-C01 cell. Just before the shift begins on October 8th, he reports an unplanned absence.  
+**The Action:** The Shift Leader logs a "62-Absence" event from 06:00 to 14:00 specifically for this operator using the Streamlit Event Logger.  
+**The Result:** The Databricks Silver layer detects the absence and automatically drops the Default Operator from the cell. In the Power BI matrix, Dariusz's planned production hours are instantly zeroed out, and the system reassigns the 8.00 production hours on cell A01-C01 to his designated Backup Operator (Marcin Kowalski).
 
-*(Tutaj możesz wrzucić screen ze Streamlita ze zgłoszeniem L4 + ewentualnie screen z PowerBI, gdzie widać, że godziny przeszły na zastępcę)*
+#### Before adding absence
+![PowerBI Capacity Planner page](assets/Capacity_planning_example_1_0.png)
 
-## Scenario 2: Ad-Hoc Reallocation (The "Swap")
-**The Situation:** A machine breaks down on Line A. The Shift Leader urgently needs to move an operator from Line A to help on Line B, which is currently unassigned.
-**The Action:** The leader uses the Streamlit app to create a "Swap" event, directly assigning the operator to the cell on Line B from 10:00 to 14:00.
-**The Result:** The Interval Breaking algorithm in Databricks slices the operator's timeline at exactly 10:00. In Power BI, this operator will show standard production time on Line A until 10:00, and production time on Line B for the remainder of the shift.
+#### Adding absence in Streamlit app
+![PowerBI Capacity Planner page](assets/Capacity_planning_example_1_1.png)
 
-*(Tutaj wrzuć screen z formularza dodawania Swapa oraz widok z Power BI)*
+#### After
+![PowerBI Capacity Planner page](assets/Capacity_planning_example_1_3.png)
 
-## Scenario 3: Additional Activities During Planned Downtime
-**The Situation:** A production line finishes its two-week run. The operators are now performing 5S (maintenance and cleaning) for the next two days.
-**The Action:** A planner logs a multi-day "5S" event in Streamlit from Monday to Tuesday.
-**The Result:** The Databricks pipeline automatically explodes the multi-day event into distinct calendar days, clamping the hours to the standard 06:00-14:00 shift. Power BI accurately reflects 8 hours of "Additional Activity" (5S) for both days without exceeding the employee's total capacity.
 
-*(Tutaj świetnie sprawdzi się screen widoku planowania lub podsumowania w Power BI pokazujący rozbicie na czynności dodatkowe)*
+### Scenario 2: Ad-Hoc Reallocation (The "Swap") and Intra-Day Slicing
+**The Situation:** An operator (Adam Narewski) needs to be reassigned to cover a different workstation for the first two hours of the shift, followed by a scheduled training session.  
+**The Action:** The shift leader uses the Streamlit app to create two consecutive events: a "Swap role" assigning Adam to the "Pakowanie (A01-C04)" cell from 08:00 to 10:00, and a "Training" event from 10:00 to 14:00.  
+**The Result:** The Interval Breaking algorithm strictly enforces the timeline. The Power BI dashboard reflects exactly 2.00 hours of standard production time for the swapped cell, 4.00 hours of additional activity (training), and accurately calculates 2.00 hours as unutilized capacity, resulting in a precise 75% daily utilization rate.
 
+#### Adding swap and additional activity in one day
+![Adding Swap](assets/Capacity_planning_example_3_1.png)
+
+![Adding Training](assets/Capacity_planning_example_3_2.png)
+
+#### After
+![View after adding](assets/Capacity_planning_example_3_3.png)
+
+
+### Scenario 3: Additional Activities During Planned Downtime
+**The Situation:** A production line finishes its scheduled run, and an operator (Jacek Bąk) is assigned to a week-long continuous training block spanning Monday to Friday.  
+**The Action:** A planner logs a single, massive multi-day "Training" event in Streamlit, setting the start date to November 2nd at 06:00 and the end date to November 6th at 14:00.  
+**The Result:** Rather than showing 104 continuous hours, the Databricks pipeline explodes the multi-day event into distinct calendar days and clamps the hours to the standard shift boundaries. The final Power BI matrix cleanly distributes exactly 8.00 hours of "Additional Activity" across each of the 5 days, ensuring the daily utilization metric never incorrectly exceeds 100%.
+
+#### Adding Training for 5 days at once
+![Streamlit View](assets/Capacity_planning_example_2_1.png)
+
+#### View after adding
+![Streamlit View](assets/Capacity_planning_example_2_2.png)
