@@ -1,7 +1,6 @@
 # Factory Operations and Operator Assignment Data Pipeline
 **Author:** Kacper Prorok  
 **Tech Stack:** Python, Streamlit, Databricks (PySpark, SQL), Delta Lake, Power BI
-
 **Date of first release: 09.2026**
 
 ---
