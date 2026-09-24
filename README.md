@@ -540,13 +540,13 @@ To demonstrate the practical application of the end-to-end data pipeline, this s
 **The Result:** The Databricks Silver layer detects the absence and automatically drops the Default Operator from the cell. In the Power BI matrix, Dariusz's planned production hours are instantly zeroed out, and the system reassigns the 8.00 production hours on cell A01-C01 to his designated Backup Operator (Marcin Kowalski).
 
 #### Before adding absence
-![PowerBI Capacity Planner page](assets/Capacity_planning_example_1_0.png)
+![PowerBI Capacity Planner page](assets/capacity_planning_example_1_0.png)
 
 #### Adding absence in Streamlit app
-![PowerBI Capacity Planner page](assets/Capacity_planning_example_1_1.png)
+![PowerBI Capacity Planner page](assets/capacity_planning_example_1_1.png)
 
 #### After
-![PowerBI Capacity Planner page](assets/Capacity_planning_example_1_3.png)
+![PowerBI Capacity Planner page](assets/capacity_planning_example_1_3.png)
 
 
 ### Scenario 2: Ad-Hoc Reallocation (The "Swap") and Intra-Day Slicing
@@ -555,12 +555,12 @@ To demonstrate the practical application of the end-to-end data pipeline, this s
 **The Result:** The Interval Breaking algorithm strictly enforces the timeline. The Power BI dashboard reflects exactly 2.00 hours of standard production time for the swapped cell, 4.00 hours of additional activity (training), and accurately calculates 2.00 hours as unutilized capacity, resulting in a precise 75% daily utilization rate.
 
 #### Adding swap and additional activity in one day
-![Adding Swap](assets/Capacity_planning_example_3_1.png)
+![Adding Swap](assets/capacity_planning_example_3_1.png)
 
-![Adding Training](assets/Capacity_planning_example_3_2.png)
+![Adding Training](assets/capacity_planning_example_3_2.png)
 
 #### After
-![View after adding](assets/Capacity_planning_example_3_3.png)
+![View after adding](assets/capacity_planning_example_3_3.png)
 
 
 ### Scenario 3: Additional Activities During Planned Downtime
@@ -569,7 +569,7 @@ To demonstrate the practical application of the end-to-end data pipeline, this s
 **The Result:** Rather than showing 104 continuous hours, the Databricks pipeline explodes the multi-day event into distinct calendar days and clamps the hours to the standard shift boundaries. The final Power BI matrix cleanly distributes exactly 8.00 hours of "Additional Activity" across each of the 5 days, ensuring the daily utilization metric never incorrectly exceeds 100%.
 
 #### Adding Training for 5 days at once
-![Streamlit View](assets/Capacity_planning_example_2_1.png)
+![Streamlit View](assets/capacity_planning_example_2_1.png)
 
 #### View after adding
-![Streamlit View](assets/Capacity_planning_example_2_2.png)
+![Streamlit View](assets/capacity_planning_example_2_2.png)
